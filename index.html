@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Enhance - A Beautiful New Tab for Chrome</title>
+    <link rel="icon" type="image/png" href="./logo.png" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Backgrounds */
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-tertiary: #f1f3f5;
+        --bg-glass: rgba(255, 255, 255, 0.85);
+
+        /* Text */
+        --text-primary: #111827;
+        --text-secondary: #4b5563;
+        --text-muted: #6b7280;
+
+        /* Borders */
+        --border-light: #d1d5db;
+        --border-medium: #ced4da;
+
+        /* Brand & Interaction */
+        --brand-primary: #20857e;
+        --brand-primary-hover: #196c66;
+        --brand-primary-focus-ring: rgba(32, 133, 126, 0.3);
+        --interactive-hover: #4b5563;
+        --interactive-hover-light: rgba(75, 85, 99, 0.1);
+
+        /* Shadows */
+        --shadow-light: rgba(0, 0, 0, 0.05);
+        --shadow-medium: rgba(0, 0, 0, 0.08);
+        --shadow-heavy: rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      /* Hero gradient background */
+      .gradient-bg {
+        background: linear-gradient(
+          135deg,
+          var(--brand-primary) 0%,
+          var(--brand-primary-hover) 50%,
+          #145954 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .gradient-bg::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 100%;
+        height: 150%;
+        background: radial-gradient(
+          circle,
+          var(--brand-primary-focus-ring) 0%,
+          transparent 60%
+        );
+        animation: float 25s ease-in-out infinite;
+      }
+
+      .gradient-bg::after {
+        content: "";
+        position: absolute;
+        bottom: -40%;
+        left: -15%;
+        width: 80%;
+        height: 120%;
+        background: radial-gradient(
+          circle,
+          rgba(32, 133, 126, 0.15) 0%,
+          transparent 60%
+        );
+        animation: float 20s ease-in-out infinite reverse;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-30px, -30px) scale(1.1);
+        }
+      }
+
+      /* Header */
+      .header-blur {
+        backdrop-filter: blur(20px);
+        background: var(--bg-glass);
+        box-shadow: 0 1px 3px var(--shadow-light);
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .logo-container {
+        background: linear-gradient(
+          135deg,
+          var(--brand-primary),
+          var(--brand-primary-hover)
+        );
+        border-radius: 12px;
+        box-shadow: 0 4px 6px var(--shadow-medium);
+      }
+
+      /* Buttons */
+      .my-btn {
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: none;
+      }
+
+      .my-btn.primary {
+        background-color: var(--brand-primary);
+        color: var(--bg-primary);
+        box-shadow: 0 4px 12px var(--brand-primary-focus-ring);
+      }
+
+      .my-btn.primary:hover {
+        background-color: var(--brand-primary-hover);
+        box-shadow: 0 6px 20px var(--brand-primary-focus-ring);
+        transform: translateY(-2px);
+      }
+
+      .my-btn.secondary {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-medium);
+      }
+
+      .my-btn.secondary:hover {
+        border-color: var(--brand-primary);
+        color: var(--brand-primary);
+      }
+
+      /* Hero CTA */
+      .cta-large {
+        padding: 20px 48px;
+        border-radius: 16px;
+        font-weight: 600;
+        font-size: 1.125rem;
+        background-color: var(--bg-primary);
+        color: var(--brand-primary);
+        box-shadow: 0 10px 25px var(--shadow-heavy);
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+      }
+
+      .cta-large:hover {
+        box-shadow: 0 20px 40px var(--shadow-heavy);
+        transform: translateY(-4px);
+        background-color: var(--bg-tertiary);
+      }
+
+      /* Badge */
+      .badge {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 8px 20px;
+        animation: pulse 3s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.85;
+        }
+      }
+
+      /* Hero Title */
+      .hero-title {
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          rgba(255, 255, 255, 0.9) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.1;
+      }
+
+      /* Screenshot */
+      .screenshot-container {
+        position: relative;
+        animation: fadeInUp 1.2s ease-out;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .screenshot-glow {
+        position: absolute;
+        inset: -40px;
+        background: linear-gradient(
+          135deg,
+          var(--brand-primary-focus-ring),
+          rgba(32, 133, 126, 0.2)
+        );
+        border-radius: 32px;
+        filter: blur(40px);
+        opacity: 0.6;
+        z-index: -1;
+      }
+
+      .screenshot-img {
+        border-radius: 24px;
+        box-shadow: 0 25px 50px var(--shadow-heavy);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* Feature Cards */
+      .feature-card {
+        background-color: var(--bg-primary);
+        padding: 48px;
+        border-radius: 16px;
+        border: 1px solid var(--border-light);
+        box-shadow: 0 2px 8px var(--shadow-light);
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px var(--shadow-medium);
+        border-color: var(--border-medium);
+      }
+
+      .feature-icon {
+        border-radius: 12px;
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px var(--shadow-light);
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(3deg);
+      }
+
+      .feature-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+
+      .feature-description {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* Privacy Section */
+      .privacy-icon-container {
+        background: linear-gradient(
+          135deg,
+          rgba(32, 133, 126, 0.1),
+          rgba(32, 133, 126, 0.15)
+        );
+        border-radius: 24px;
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 32px;
+        box-shadow: 0 8px 16px var(--shadow-medium);
+      }
+
+      .privacy-icon-container svg {
+        color: var(--brand-primary);
+      }
+
+      /* Section Reveal */
+      .section-reveal {
+        animation: sectionReveal 0.8s ease-out;
+      }
+
+      @keyframes sectionReveal {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Footer */
+      .footer-bg {
+        background: linear-gradient(
+          135deg,
+          var(--text-primary) 0%,
+          #1f2937 50%,
+          var(--text-primary) 100%
+        );
+      }
+
+      /* Utility Classes */
+      .section-title {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        letter-spacing: -0.02em;
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      @media (min-width: 768px) {
+        .section-title {
+          font-size: 3.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="fixed top-0 w-full z-50 header-blur">
+      <div
+        class="container mx-auto flex justify-between items-center px-6 lg:px-8 py-4"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="logo-container w-10 h-10 flex items-center justify-center"
+          >
+            <img src="./logo.png" alt="Enhance Logo" class="w-6 h-6" />
+          </div>
+          <h1
+            class="text-2xl font-black tracking-tight"
+            style="color: var(--text-primary)"
+          >
+            Enhance
+          </h1>
+        </div>
+        <a
+          href="https://chromewebstore.google.com/detail/enhance/ionilggnggnhobilfecfpbeickbbobpb"
+          class="my-btn primary"
+        >
+          Add to Chrome
+        </a>
+      </div>
+    </header>
+
+    <main class="pt-16">
+      <section id="get-started" class="gradient-bg py-32 md:py-48 relative">
+        <div class="container mx-auto text-center px-6 relative z-10">
+          <div class="inline-flex items-center gap-2 mb-8 badge">
+            <span class="text-white text-sm font-semibold tracking-wide"
+              >✨ Free Chrome Extension</span
+            >
+          </div>
+          <h2
+            class="hero-title text-6xl md:text-8xl font-black mb-8 tracking-tighter"
+          >
+            Transform Every<br />New Tab
+          </h2>
+          <p
+            class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+          >
+            Experience a beautiful new tab page with daily inspiration, powerful
+            productivity tools, and complete privacy.
+          </p>
+          <a
+            href="https://chromewebstore.google.com/detail/enhance/ionilggnggnhobilfecfpbeickbbobpb"
+            class="cta-large"
+          >
+            Add to Chrome – It's Free
+          </a>
+
+          <div class="mt-24 mx-auto max-w-7xl screenshot-container">
+            <div class="relative">
+              <div class="screenshot-glow"></div>
+              <img
+                src="./i1.png"
+                alt="Screenshot of the Enhance new tab page"
+                class="screenshot-img relative w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="py-32 md:py-40 section-reveal"
+        style="background-color: var(--bg-primary)"
+      >
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-24">
+            <h3 class="section-title">Everything You Need</h3>
+            <p class="section-subtitle max-w-2xl mx-auto">
+              A clean, distraction-free design focused on what matters most.
+            </p>
+          </div>
+
+          <div
+            class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
+          >
+            <div class="feature-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+                  color: #475569;
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+              <h4 class="feature-title">Daily Backgrounds</h4>
+              <p class="feature-description">
+                Start your day with stunning, high-quality photos from
+                landscapes, automobiles, and more.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    rgba(32, 133, 126, 0.1),
+                    rgba(32, 133, 126, 0.15)
+                  );
+                  color: var(--brand-primary);
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <h4 class="feature-title">Minimal Notes</h4>
+              <p class="feature-description">
+                Jot down quick thoughts with a simple notes app featuring
+                themes, fonts, and export options.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+                  color: #0369a1;
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <h4 class="feature-title">Shortcut Dock</h4>
+              <p class="feature-description">
+                Keep your favorite websites and frequently used shortcuts just a
+                click away.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+                  color: #047857;
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h4 class="feature-title">Built-in Tasks</h4>
+              <p class="feature-description">
+                Capture, organize, and manage your to-dos directly from your new
+                tab page.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(135deg, #fef3c7, #fde68a);
+                  color: #b45309;
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                  />
+                </svg>
+              </div>
+              <h4 class="feature-title">Daily Quotes</h4>
+              <p class="feature-description">
+                Get a dose of inspiration with motivational quotes to energize
+                your day.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+                  color: #7c3aed;
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
+              <h4 class="feature-title">Personalize It</h4>
+              <p class="feature-description">
+                Make it your own. Full control to choose which features you want
+                to see.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section-reveal"
+        style="
+          background: linear-gradient(
+            135deg,
+            var(--bg-secondary) 0%,
+            var(--bg-primary) 50%,
+            rgba(32, 133, 126, 0.03) 100%
+          );
+        "
+      >
+        <div class="container mx-auto px-6 py-32 md:py-40 text-center">
+          <div class="max-w-4xl mx-auto">
+            <div class="privacy-icon-container">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+            </div>
+            <h3 class="section-title">Your Privacy is Paramount</h3>
+            <p
+              class="section-subtitle max-w-2xl mx-auto"
+              style="line-height: 1.7"
+            >
+              Enhance does not collect, store, or share any personal data. All
+              your notes, tasks, and preferences are saved securely on your own
+              device. What happens in your browser, stays in your browser.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-bg text-white">
+      <div class="container mx-auto py-20 px-6 text-center">
+        <h2 class="text-5xl md:text-6xl font-black mb-8 tracking-tight">
+          Ready for a Better New Tab?
+        </h2>
+        <p class="text-gray-300 text-xl mb-12 max-w-2xl mx-auto font-medium">
+          Start your journey to a better browsing experience.
+        </p>
+        <a
+          href="https://chromewebstore.google.com/detail/enhance/ionilggnggnhobilfecfpbeickbbobpb"
+          class="cta-large"
+        >
+          Get Enhance for Chrome
+        </a>
+        <div
+          style="
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 64px;
+            padding-top: 32px;
+          "
+        >
+          <p class="text-gray-400 font-medium">
+            &copy; 2024 Enhance. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
